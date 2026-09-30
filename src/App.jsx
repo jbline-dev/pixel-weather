@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { describeWeather } from './weatherCodes'
 import Scene from './components/scene'
 import SearchBox from './components/SearchBox'
+import { formatTemp, formatWind, formatRain } from './units'
 
 const DEFAULT_LOCATION = {
   name: 'Davao City',
@@ -25,6 +26,7 @@ function App() {
   const [location, setLocation] = useState(DEFAULT_LOCATION)
   const [weather, setWeather] = useState(null)
   const [error, setError] = useState(null)
+  const [units, setUnits] = useState('metric')
 
   useEffect(() => {
     const controller = new AbortController()
@@ -84,17 +86,34 @@ function App() {
                 .filter(Boolean)
                 .join(', ')}
             </p>
-            <p className="report__temp">{current.temperature_2m}°C</p>
+            <p className="report__temp">
+              {formatTemp(current.temperature_2m, units)}
+            </p>
             <p className="report__condition">{condition.label}</p>
             <p className="report__time">{current.is_day ? 'Day' : 'Night'}</p>
             <ul className="report__details">
-              <li>Wind: {current.wind_speed_10m} km/h</li>
+            <button
+              className="unit-toggle"
+              type="button"
+              onClick={() =>
+                setUnits(units === 'metric' ? 'imperial' : 'metric')
+              }
+            >
+              Switch to {units === 'metric' ? '°F' : '°C'}
+            </button>
+              <li>Wind: {formatWind(current.wind_speed_10m, units)}</li>
               <li>Clouds: {current.cloud_cover}%</li>
-              <li>Precipitation: {current.precipitation} mm</li>
+              <li>Precipitation: {formatRain(current.precipitation, units)}</li>
             </ul>
           </section>
         </div>
       )}
+      <footer className="credit">
+        Weather data by{' '}
+        <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">
+          Open-Meteo.com
+        </a>
+      </footer>
     </main>
   )
 }

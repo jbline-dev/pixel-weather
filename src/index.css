@@ -90,3 +90,34 @@ h1 {
 .layout--loading {
   opacity: 0.45;
 }
+
+.unit-toggle {
+  font: inherit;
+  padding: 4px 12px;
+  color: #1a1c2c;
+  background: #ffcd75;
+  border: 4px solid #f4f4f4;
+  border-radius: 0;
+  box-shadow: 4px 4px 0 #0d0f1a;
+  cursor: pointer;
+}
+
+.unit-toggle:active {
+  transform: translate(4px, 4px);
+  box-shadow: none;
+}
+
+.unit-toggle:focus-visible,
+.credit a:focus-visible {
+  outline: 4px solid #73eff7;
+  outline-offset: 2px;
+}
+
+.credit {
+  font-size: 1.1rem;
+  color: #b1b5c9;
+}
+
+.credit a {
+  color: #73eff7;
+}
