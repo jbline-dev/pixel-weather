@@ -1,0 +1,20 @@
+.scene {
+  width: min(100%, 640px);
+  aspect-ratio: 16 / 9;
+  border: 4px solid #f4f4f4;
+  box-shadow: 8px 8px 0 #0d0f1a;
+}
+
+.scene--day {
+  background: #41a6f6;
+}
+
+.scene--night {
+  background: #12183a;
+}
+
+.scene__svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

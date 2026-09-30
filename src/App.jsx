@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { describeWeather } from './weatherCodes'
+import Scene from './components/Scene'
 
 const WEATHER_URL =
   'https://api.open-meteo.com/v1/forecast?latitude=7.19&longitude=125.45&current=temperature_2m,weather_code,is_day,wind_speed_10m,cloud_cover,precipitation&timezone=auto'
@@ -33,6 +34,7 @@ function App() {
 
       {error && <p>Something went wrong: {error}</p>}
       {!error && !weather && <p>Loading...</p>}
+      {weather && <Scene isDay={weather.is_day === 1} />}
       {weather && (
         <section className="report">
           <p className="report__temp">{weather.temperature_2m}°C</p>
