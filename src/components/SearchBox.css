@@ -73,3 +73,8 @@
 .search__result:hover {
   background: #3b5dc9;
 }
+
+.search__button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}

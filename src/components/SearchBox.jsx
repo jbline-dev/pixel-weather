@@ -5,6 +5,8 @@ function SearchBox({ onSelect }) {
   const [query, setQuery] = useState('')
   const [results, setResults] = useState([])
   const [status, setStatus] = useState('idle')
+  const [locating, setLocating] = useState(false)
+  const [geoError, setGeoError] = useState('')
 
   async function handleSubmit(event) {
     event.preventDefault()
@@ -41,6 +43,37 @@ function SearchBox({ onSelect }) {
     setStatus('idle')
   }
 
+  function handleLocate() {
+    if (!navigator.geolocation) {
+      setGeoError('Your browser does not support location.')
+      return
+    }
+
+    setLocating(true)
+    setGeoError('')
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        onSelect({
+          name: 'Your location',
+          country: '',
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        })
+        setLocating(false)
+      },
+      (err) => {
+        setLocating(false)
+        if (err.code === err.PERMISSION_DENIED) {
+          setGeoError('Location permission denied. Search for a city instead.')
+        } else {
+          setGeoError('Could not get your location. Search for a city instead.')
+        }
+      },
+      { timeout: 10000 }
+    )
+  }
+
   return (
     <div className="search">
       <form className="search__form" onSubmit={handleSubmit}>
@@ -55,10 +88,22 @@ function SearchBox({ onSelect }) {
         <button className="search__button" type="submit">
           Go
         </button>
+        <button
+          className="search__button"
+          type="button"
+          onClick={handleLocate}
+          disabled={locating}
+          aria-label="Use my location"
+          title="Use my location"
+        >
+          {locating ? '...' : '◎'}
+        </button>
       </form>
 
       <div role="status">
         {status === 'loading' && <p className="search__msg">Searching...</p>}
+        {locating && <p className="search__msg">Finding you...</p>}
+        {geoError && <p className="search__msg">{geoError}</p>}
         {status === 'error' && (
           <p className="search__msg">Search failed. Try again.</p>
         )}
