@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { describeWeather } from './weatherCodes'
 
 const WEATHER_URL =
   'https://api.open-meteo.com/v1/forecast?latitude=7.19&longitude=125.45&current=temperature_2m,weather_code,is_day,wind_speed_10m,cloud_cover,precipitation&timezone=auto'
@@ -24,6 +25,8 @@ function App() {
     loadWeather()
   }, [])
 
+  const condition = weather ? describeWeather(weather.weather_code) : null
+
   return (
     <main className="app">
       <h1>Pixel Weather</h1>
@@ -31,9 +34,16 @@ function App() {
       {error && <p>Something went wrong: {error}</p>}
       {!error && !weather && <p>Loading...</p>}
       {weather && (
-        <p>
-          {weather.temperature_2m}°C (code {weather.weather_code})
-        </p>
+        <section>
+          <p>{weather.temperature_2m}°C</p>
+          <p>{condition.label}</p>
+          <p>{weather.is_day ? 'Day' : 'Night'}</p>
+          <ul>
+            <li>Wind: {weather.wind_speed_10m} km/h</li>
+            <li>Clouds: {weather.cloud_cover}%</li>
+            <li>Precipitation: {weather.precipitation} mm</li>
+          </ul>
+        </section>
       )}
     </main>
   )
