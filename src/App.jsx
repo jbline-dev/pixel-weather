@@ -59,7 +59,7 @@ function App() {
 
   return (
     <main className="app">
-    <title>Pixiecast</title>
+      <h1>Pixiecast</h1>
 
       <SearchBox onSelect={setLocation} />
 
