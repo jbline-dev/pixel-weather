@@ -59,7 +59,7 @@ function App() {
 
   return (
     <main className="app">
-      <h1>Pixel Weather</h1>
+    <title>Pixiecast</title>
 
       <SearchBox onSelect={setLocation} />
 
