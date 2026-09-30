@@ -4,8 +4,7 @@ A weather app where the weather is a living pixel-art world. Real conditions
 from any city drive the scene: clouds drift faster in wind, rain gets heavier
 with precipitation, storms flash with lightning, and night brings stars.
 
-**Live demo:** [add URL after deployment]
-
+**Live demo:** https://pixiecast.vercel.app/
 ## Features
 
 - Live weather from Open-Meteo (no simulated data)
