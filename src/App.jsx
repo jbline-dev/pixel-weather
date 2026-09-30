@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { describeWeather } from './weatherCodes'
-import Scene from './components/Scene'
+import Scene from './components/scene'
+import SearchBox from './components/SearchBox'
 
 const DEFAULT_LOCATION = {
   name: 'Davao City',
@@ -21,7 +22,7 @@ function buildWeatherUrl({ latitude, longitude }) {
 }
 
 function App() {
-  const [location] = useState(DEFAULT_LOCATION)
+  const [location, setLocation] = useState(DEFAULT_LOCATION)
   const [weather, setWeather] = useState(null)
   const [error, setError] = useState(null)
 
@@ -55,6 +56,7 @@ function App() {
   return (
     <main className="app">
       <h1>Pixel Weather</h1>
+      <SearchBox onSelect={setLocation} />
 
       {error && <p>Something went wrong: {error}</p>}
       {!error && !weather && <p>Loading...</p>}
@@ -67,7 +69,7 @@ function App() {
           />
           <section className="report">
             <p className="report__place">
-              {location.name}, {location.country}
+              {[location.name, location.country].filter(Boolean).join(', ')}
             </p>
             <p className="report__temp">{weather.temperature_2m}°C</p>
             <p className="report__condition">{condition.label}</p>
