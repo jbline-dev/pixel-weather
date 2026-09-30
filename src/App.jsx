@@ -35,23 +35,23 @@ function App() {
       {error && <p>Something went wrong: {error}</p>}
       {!error && !weather && <p>Loading...</p>}
       {weather && (
-        <Scene
-          isDay={weather.is_day === 1}
-          cloudCover={weather.cloud_cover}
-          scene={condition.scene}
-        />
-      )}
-      {weather && (
-        <section className="report">
-          <p className="report__temp">{weather.temperature_2m}°C</p>
-          <p className="report__condition">{condition.label}</p>
-          <p className="report__time">{weather.is_day ? 'Day' : 'Night'}</p>
-          <ul className="report__details">
-            <li>Wind: {weather.wind_speed_10m} km/h</li>
-            <li>Clouds: {weather.cloud_cover}%</li>
-            <li>Precipitation: {weather.precipitation} mm</li>
-          </ul>
-        </section>
+        <div className="layout">
+          <Scene
+            isDay={weather.is_day === 1}
+            cloudCover={weather.cloud_cover}
+            scene={condition.scene}
+          />
+          <section className="report">
+            <p className="report__temp">{weather.temperature_2m}°C</p>
+            <p className="report__condition">{condition.label}</p>
+            <p className="report__time">{weather.is_day ? 'Day' : 'Night'}</p>
+            <ul className="report__details">
+              <li>Wind: {weather.wind_speed_10m} km/h</li>
+              <li>Clouds: {weather.cloud_cover}%</li>
+              <li>Precipitation: {weather.precipitation} mm</li>
+            </ul>
+          </section>
+        </div>
       )}
     </main>
   )
