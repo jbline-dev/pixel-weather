@@ -75,6 +75,8 @@ function App() {
             isDay={current.is_day === 1}
             cloudCover={current.cloud_cover}
             scene={condition.scene}
+            precipitation={current.precipitation}
+            windSpeed={current.wind_speed_10m}
           />
           <section className="report">
             <p className="report__place">

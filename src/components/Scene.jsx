@@ -72,23 +72,30 @@ function Stars() {
   )
 }
 
-const DROPS = Array.from({ length: 24 }, (_, i) => ({
-  x: (i * 11) % 64,
-  delay: -((i * 7) % 10) / 10,
+const MAX_DROPS = 32
+
+const DROPS = Array.from({ length: MAX_DROPS }, (_, i) => ({
+  x: (i * 37 + 11) % 64,
+  height: 2 + (i % 3),
+  duration: 0.4 + ((i * 7) % 5) / 10,
+  delay: -(((i * 13) % 17) / 17) * 0.8,
 }))
 
-function Rain() {
+function Rain({ count }) {
   return (
     <g fill="#73eff7">
-      {DROPS.map((drop, i) => (
+      {DROPS.slice(0, count).map((drop, i) => (
         <rect
           key={i}
           className="drop"
           x={drop.x}
           y="0"
           width="1"
-          height="3"
-          style={{ animationDelay: `${drop.delay}s` }}
+          height={drop.height}
+          style={{
+            animationDelay: `${drop.delay}s`,
+            animationDuration: `${drop.duration}s`,
+          }}
         />
       ))}
     </g>
@@ -144,17 +151,34 @@ function Fog() {
   )
 }
 
-function Scene({ isDay, cloudCover, scene }) {
+function rainCount(mm) {
+  if (mm < 0.5) return 8
+  if (mm < 2.5) return 16
+  return 24
+}
+
+function windFactor(speed) {
+  return Math.max(0.25, 1 - speed / 50)
+}
+
+function windDrift(speed) {
+  return Math.round(Math.min(speed, 40) / 5)
+}
+
+function Scene({ isDay, cloudCover, scene, precipitation, windSpeed }) {
   const time = isDay ? 'day' : 'night'
   const stormy = scene === 'rain' || scene === 'thunder'
   const snowy = scene === 'snow'
   const foggy = scene === 'fog'
   const overcast = stormy || snowy
   const clouds = overcast ? 3 : foggy ? 0 : cloudCount(cloudCover)
+  const cloudSpeed = windFactor(windSpeed)
+  const dropCount = scene === 'thunder' ? MAX_DROPS : rainCount(precipitation)
 
   return (
     <div
       className={`scene scene--${time} scene--${scene}`}
+      style={{ '--drift': `${windDrift(windSpeed)}px` }}
       aria-hidden="true"
     >
       <svg
@@ -164,10 +188,14 @@ function Scene({ isDay, cloudCover, scene }) {
       >
         {!overcast && !foggy && (isDay ? <Sun /> : <><Stars /><Moon /></>)}
         {CLOUDS.slice(0, clouds).map((cloud, i) => (
-          <Cloud key={i} {...cloud} />
+          <Cloud
+            key={i}
+            {...cloud}
+            duration={cloud.duration * cloudSpeed}
+          />
         ))}
         {scene === 'thunder' && <Bolt />}
-        {stormy && <Rain />}
+        {stormy && <Rain count={dropCount} />}
         {snowy && <Snow />}
         {foggy && <Fog />}
         <rect x="0" y="28" width="64" height="8" fill="#38b764" />
@@ -177,5 +205,6 @@ function Scene({ isDay, cloudCover, scene }) {
     </div>
   )
 }
+
 
 export default Scene
