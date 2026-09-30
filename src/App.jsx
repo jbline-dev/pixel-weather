@@ -38,11 +38,10 @@ function App() {
           throw new Error(`Request failed with status ${response.status}`)
         }
         const data = await response.json()
-        setWeather(data.current)
-        setError(null)
+        setWeather({ location, current: data.current })
       } catch (err) {
         if (err.name === 'AbortError') return
-        setError(err.message)
+        setError({ location, message: err.message })
       }
     }
 
@@ -51,33 +50,45 @@ function App() {
     return () => controller.abort()
   }, [location])
 
-  const condition = weather ? describeWeather(weather.weather_code) : null
+  const current = weather?.current
+  const errorMessage = error?.location === location ? error.message : null
+  const isLoading = !errorMessage && weather?.location !== location
+  const condition = current ? describeWeather(current.weather_code) : null
 
   return (
     <main className="app">
       <h1>Pixel Weather</h1>
+
       <SearchBox onSelect={setLocation} />
 
-      {error && <p>Something went wrong: {error}</p>}
-      {!error && !weather && <p>Loading...</p>}
-      {weather && (
-        <div className="layout">
+      <div className="status" role="status">
+        {isLoading && 'Loading weather...'}
+      </div>
+
+      {errorMessage && (
+        <p role="alert">Something went wrong: {errorMessage}</p>
+      )}
+
+      {current && !errorMessage && (
+        <div className={`layout${isLoading ? ' layout--loading' : ''}`}>
           <Scene
-            isDay={weather.is_day === 1}
-            cloudCover={weather.cloud_cover}
+            isDay={current.is_day === 1}
+            cloudCover={current.cloud_cover}
             scene={condition.scene}
           />
           <section className="report">
             <p className="report__place">
-              {[location.name, location.country].filter(Boolean).join(', ')}
+              {[weather.location.name, weather.location.country]
+                .filter(Boolean)
+                .join(', ')}
             </p>
-            <p className="report__temp">{weather.temperature_2m}°C</p>
+            <p className="report__temp">{current.temperature_2m}°C</p>
             <p className="report__condition">{condition.label}</p>
-            <p className="report__time">{weather.is_day ? 'Day' : 'Night'}</p>
+            <p className="report__time">{current.is_day ? 'Day' : 'Night'}</p>
             <ul className="report__details">
-              <li>Wind: {weather.wind_speed_10m} km/h</li>
-              <li>Clouds: {weather.cloud_cover}%</li>
-              <li>Precipitation: {weather.precipitation} mm</li>
+              <li>Wind: {current.wind_speed_10m} km/h</li>
+              <li>Clouds: {current.cloud_cover}%</li>
+              <li>Precipitation: {current.precipitation} mm</li>
             </ul>
           </section>
         </div>
