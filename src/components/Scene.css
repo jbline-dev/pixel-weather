@@ -127,3 +127,59 @@
     animation: none;
   }
 }
+
+.scene--day.scene--snow {
+  background: #94b0c2;
+}
+
+.scene--night.scene--snow {
+  background: #333c57;
+}
+
+.scene--day.scene--fog {
+  background: #b1b5c9;
+}
+
+.scene--night.scene--fog {
+  background: #414a6b;
+}
+
+.scene--snow .cloud {
+  fill: #f4f4f4;
+}
+
+.flake {
+  animation-name: snowfall;
+  animation-timing-function: steps(36);
+  animation-iteration-count: infinite;
+}
+
+@keyframes snowfall {
+  from {
+    transform: translate(0, -2px);
+  }
+  to {
+    transform: translate(3px, 36px);
+  }
+}
+
+.fog {
+  opacity: 0.6;
+  animation: fog-drift 40s steps(64) infinite;
+}
+
+@keyframes fog-drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(16px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flake,
+  .fog {
+    animation: none;
+  }
+}

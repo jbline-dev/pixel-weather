@@ -107,10 +107,50 @@ function Bolt() {
   )
 }
 
+const FLAKES = Array.from({ length: 20 }, (_, i) => ({
+  x: (i * 13) % 64,
+  delay: -((i * 9) % 20) / 2,
+  duration: 6 + (i % 4),
+}))
+
+function Snow() {
+  return (
+    <g fill="#f4f4f4">
+      {FLAKES.map((flake, i) => (
+        <rect
+          key={i}
+          className="flake"
+          x={flake.x}
+          y="0"
+          width="1"
+          height="1"
+          style={{
+            animationDelay: `${flake.delay}s`,
+            animationDuration: `${flake.duration}s`,
+          }}
+        />
+      ))}
+    </g>
+  )
+}
+
+function Fog() {
+  return (
+    <g className="fog" fill="#c2c3c7">
+      <rect x="-16" y="12" width="48" height="3" />
+      <rect x="20" y="18" width="52" height="3" />
+      <rect x="-8" y="23" width="44" height="3" />
+    </g>
+  )
+}
+
 function Scene({ isDay, cloudCover, scene }) {
   const time = isDay ? 'day' : 'night'
   const stormy = scene === 'rain' || scene === 'thunder'
-  const clouds = stormy ? 3 : cloudCount(cloudCover)
+  const snowy = scene === 'snow'
+  const foggy = scene === 'fog'
+  const overcast = stormy || snowy
+  const clouds = overcast ? 3 : foggy ? 0 : cloudCount(cloudCover)
 
   return (
     <div
@@ -122,12 +162,14 @@ function Scene({ isDay, cloudCover, scene }) {
         viewBox="0 0 64 36"
         shapeRendering="crispEdges"
       >
-        {!stormy && (isDay ? <Sun /> : <><Stars /><Moon /></>)}
+        {!overcast && !foggy && (isDay ? <Sun /> : <><Stars /><Moon /></>)}
         {CLOUDS.slice(0, clouds).map((cloud, i) => (
           <Cloud key={i} {...cloud} />
         ))}
         {scene === 'thunder' && <Bolt />}
         {stormy && <Rain />}
+        {snowy && <Snow />}
+        {foggy && <Fog />}
         <rect x="0" y="28" width="64" height="8" fill="#38b764" />
         <rect x="0" y="28" width="64" height="1" fill="#a7f070" />
       </svg>
