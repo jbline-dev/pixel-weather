@@ -34,7 +34,12 @@ function App() {
 
       {error && <p>Something went wrong: {error}</p>}
       {!error && !weather && <p>Loading...</p>}
-      {weather && <Scene isDay={weather.is_day === 1} />}
+      {weather && (
+        <Scene
+          isDay={weather.is_day === 1}
+          cloudCover={weather.cloud_cover}
+        />
+      )}
       {weather && (
         <section className="report">
           <p className="report__temp">{weather.temperature_2m}°C</p>

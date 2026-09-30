@@ -1,5 +1,33 @@
 import './Scene.css'
 
+const CLOUDS = [
+  { y: 5, duration: 60, delay: -10 },
+  { y: 14, duration: 90, delay: -55 },
+  { y: 9, duration: 75, delay: -30 },
+]
+
+function cloudCount(cover) {
+  if (cover < 20) return 0
+  if (cover < 50) return 1
+  if (cover < 80) return 2
+  return 3
+}
+
+function Cloud({ y, duration, delay }) {
+  return (
+    <g
+      className="cloud"
+      style={{ animationDuration: `${duration}s`, animationDelay: `${delay}s` }}
+    >
+      <g transform={`translate(0 ${y})`}>
+        <rect x="2" y="0" width="6" height="1" />
+        <rect x="1" y="1" width="10" height="1" />
+        <rect x="0" y="2" width="12" height="2" />
+      </g>
+    </g>
+  )
+}
+
 function Sun() {
   return (
     <g fill="#ffcd75">
@@ -44,7 +72,7 @@ function Stars() {
   )
 }
 
-function Scene({ isDay }) {
+function Scene({ isDay,cloudCover }) {
   const time = isDay ? 'day' : 'night'
 
   return (
@@ -57,6 +85,10 @@ function Scene({ isDay }) {
         {isDay ? <Sun /> : <><Stars /><Moon /></>}
         <rect x="0" y="28" width="64" height="8" fill="#38b764" />
         <rect x="0" y="28" width="64" height="1" fill="#a7f070" />
+        
+        {CLOUDS.slice(0, cloudCount(cloudCover)).map((cloud, i) => (
+          <Cloud key={i} {...cloud} />
+        ))}
       </svg>
     </div>
   )
