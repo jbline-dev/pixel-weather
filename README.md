@@ -1,16 +1,38 @@
-# React + Vite
+# Pixel Weather
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A weather app where the weather is a living pixel-art world. Real conditions
+from any city drive the scene: clouds drift faster in wind, rain gets heavier
+with precipitation, storms flash with lightning, and night brings stars.
 
-Currently, two official plugins are available:
+**Live demo:** [add URL after deployment]
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- Live weather from Open-Meteo (no simulated data)
+- City search and "use my location"
+- Scene driven by weather code, day/night, cloud cover, precipitation and wind
+- Animated rain, snow, fog, thunderstorms and clouds, in pixel steps
+- °C / °F toggle
+- Responsive layout, keyboard accessible, respects reduced-motion settings
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech
 
-## Expanding the ESLint configuration
+React 19, Vite, plain CSS and SVG. No UI or animation libraries.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## What I learned
+
+- Fetching async data in `useEffect`, and cancelling outdated requests with
+  `AbortController`
+- Deriving a loading state from data instead of storing it
+- Driving CSS animations from React data with custom properties
+- Drawing pixel art with SVG rects and `steps()` animation
+
+## Run locally
+
+    npm install
+    npm run dev
+
+## Credits
+
+Weather data by [Open-Meteo](https://open-meteo.com/), used under their free
+non-commercial tier.

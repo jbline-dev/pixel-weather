@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { describeWeather } from './weatherCodes'
-import Scene from './components/scene'
+import Scene from './components/Scene'
 import SearchBox from './components/SearchBox'
 import { formatTemp, formatWind, formatRain } from './units'
 
@@ -80,7 +80,10 @@ function App() {
             precipitation={current.precipitation}
             windSpeed={current.wind_speed_10m}
           />
-          <section className="report">
+          <section
+            className="report"
+            aria-label={`Current weather in ${weather.location.name}`}
+          >
             <p className="report__place">
               {[weather.location.name, weather.location.country]
                 .filter(Boolean)
