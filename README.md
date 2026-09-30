@@ -1,4 +1,4 @@
-# Pixel Weather
+# Pixiecast
 
 A weather app where the weather is a living pixel-art world. Real conditions
 from any city drive the scene: clouds drift faster in wind, rain gets heavier
