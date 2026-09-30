@@ -72,24 +72,66 @@ function Stars() {
   )
 }
 
-function Scene({ isDay,cloudCover }) {
+const DROPS = Array.from({ length: 24 }, (_, i) => ({
+  x: (i * 11) % 64,
+  delay: -((i * 7) % 10) / 10,
+}))
+
+function Rain() {
+  return (
+    <g fill="#73eff7">
+      {DROPS.map((drop, i) => (
+        <rect
+          key={i}
+          className="drop"
+          x={drop.x}
+          y="0"
+          width="1"
+          height="3"
+          style={{ animationDelay: `${drop.delay}s` }}
+        />
+      ))}
+    </g>
+  )
+}
+
+function Bolt() {
+  return (
+    <g className="bolt" fill="#ffcd75">
+      <rect x="32" y="9" width="3" height="3" />
+      <rect x="30" y="12" width="4" height="3" />
+      <rect x="31" y="15" width="3" height="3" />
+      <rect x="28" y="18" width="4" height="3" />
+      <rect x="29" y="21" width="2" height="4" />
+    </g>
+  )
+}
+
+function Scene({ isDay, cloudCover, scene }) {
   const time = isDay ? 'day' : 'night'
+  const stormy = scene === 'rain' || scene === 'thunder'
+  const clouds = stormy ? 3 : cloudCount(cloudCover)
 
   return (
-    <div className={`scene scene--${time}`} aria-hidden="true">
+    <div
+      className={`scene scene--${time} scene--${scene}`}
+      aria-hidden="true"
+    >
       <svg
         className="scene__svg"
         viewBox="0 0 64 36"
         shapeRendering="crispEdges"
       >
-        {isDay ? <Sun /> : <><Stars /><Moon /></>}
-        <rect x="0" y="28" width="64" height="8" fill="#38b764" />
-        <rect x="0" y="28" width="64" height="1" fill="#a7f070" />
-        
-        {CLOUDS.slice(0, cloudCount(cloudCover)).map((cloud, i) => (
+        {!stormy && (isDay ? <Sun /> : <><Stars /><Moon /></>)}
+        {CLOUDS.slice(0, clouds).map((cloud, i) => (
           <Cloud key={i} {...cloud} />
         ))}
+        {scene === 'thunder' && <Bolt />}
+        {stormy && <Rain />}
+        <rect x="0" y="28" width="64" height="8" fill="#38b764" />
+        <rect x="0" y="28" width="64" height="1" fill="#a7f070" />
       </svg>
+      {scene === 'thunder' && <div className="scene__flash" />}
     </div>
   )
 }

@@ -47,3 +47,83 @@
     animation: none;
   }
 }
+
+.scene {
+  position: relative;
+  overflow: hidden;
+}
+
+.scene--day.scene--rain {
+  background: #566c86;
+}
+
+.scene--night.scene--rain {
+  background: #0b1026;
+}
+
+.scene--day.scene--thunder {
+  background: #333c57;
+}
+
+.scene--night.scene--thunder {
+  background: #1a1c2c;
+}
+
+.scene--rain .cloud {
+  fill: #94b0c2;
+}
+
+.scene--thunder .cloud {
+  fill: #566c86;
+}
+
+.drop {
+  animation: fall 0.5s steps(10) infinite;
+}
+
+@keyframes fall {
+  from {
+    transform: translateY(-4px);
+  }
+  to {
+    transform: translateY(36px);
+  }
+}
+
+.bolt {
+  opacity: 0;
+  animation: flash 6s infinite;
+}
+
+.scene__flash {
+  position: absolute;
+  inset: 0;
+  background: #f4f4f4;
+  opacity: 0;
+  pointer-events: none;
+  animation: flash-screen 6s infinite;
+}
+
+@keyframes flash {
+  0%, 88%, 100% { opacity: 0; }
+  90% { opacity: 1; }
+  92% { opacity: 0; }
+  94% { opacity: 1; }
+  96% { opacity: 0; }
+}
+
+@keyframes flash-screen {
+  0%, 88%, 100% { opacity: 0; }
+  90% { opacity: 0.5; }
+  92% { opacity: 0; }
+  94% { opacity: 0.5; }
+  96% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drop,
+  .bolt,
+  .scene__flash {
+    animation: none;
+  }
+}

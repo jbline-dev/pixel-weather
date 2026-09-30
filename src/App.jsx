@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { describeWeather } from './weatherCodes'
-import Scene from './components/Scene'
+import Scene from './components/scene';
 
 const WEATHER_URL =
   'https://api.open-meteo.com/v1/forecast?latitude=7.19&longitude=125.45&current=temperature_2m,weather_code,is_day,wind_speed_10m,cloud_cover,precipitation&timezone=auto'
@@ -38,6 +38,7 @@ function App() {
         <Scene
           isDay={weather.is_day === 1}
           cloudCover={weather.cloud_cover}
+          scene={condition.scene}
         />
       )}
       {weather && (
